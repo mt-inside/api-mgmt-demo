@@ -6,6 +6,7 @@ TODO
 * separate VM/container(VM cause need to run docker) to run this in, so we can have a clean gopath and get an exact list of the build tools needed
 
 make sdk importable
+* TODO: can we find the plugin buf remote build uses to do this and run it locally (remote reference)?
 * cd /tmp/gen/go/greeter/
 * go mod init github.com/mt-inside/greeter-sdk-go
 * go mod tidy

@@ -31,7 +31,8 @@ func main() {
 		},
 	)
 	if err != nil {
-		panic(err)
+		log.Error(err, "Failed to get greeted")
+		os.Exit(1)
 	}
 
 	fmt.Println(resp.Message)
