@@ -1,0 +1,47 @@
+TODO
+* own self-hosted sandbox BSR (can still dep on buf.build/googleapis)
+* separate GH org for all the repos (or use a repo prefix)
+  * some repos are permanent/pre-existing (apis, cookiecutter template, demo script). Some are made on the fly in the demo eg mygreeter-conference, greeterclient-conference
+* push cookiecutter template to this org too
+* separate VM/container(VM cause need to run docker) to run this in, so we can have a clean gopath and get an exact list of the build tools needed
+
+make sdk importable
+* cd /tmp/gen/go/greeter/
+* go mod init github.com/mt-inside/greeter-sdk-go
+* go mod tidy
+* git init
+* git add .
+* git commit -m "Initial commit from autogen"
+* git tag -a -m "API v1, SDK 1.0.0" v1.0.0
+
+cookiecut: mygreeter
+mv mygreeter /tmp
+cd /tmp/mygreeter
+go.mod: replace github.com/mt-inside/greeter-sdk-go => /tmp/gen/go/greeter
+go get -u github.com/mt-inside/greeter-sdk-go@v1.0.0
+vim main.go
+go mod tidy
+just run
+
+grpcurl -plaintext -format=json -d @ localhost:8080 greeter.api.v1.GreeterService.Greet << EOM
+{
+"name": "dave"
+}
+EOM
+
+cookiecut: greetclient
+mv greetclient /tmp
+cd /tmp/mygreeter
+go.mod: replace github.com/mt-inside/greeter-sdk-go => /tmp/gen/go/greeter
+go get -u github.com/mt-inside/greeter-sdk-go@v1.0.0
+vim main.go
+go mod tidy
+just run
+
+grpcurl -plaintext -format=json -d @ localhost:8080 greeter.api.v1.ConfigService.SetGreeting << EOM
+{
+"greeting": "salut"
+}
+EOM
+
+just run
